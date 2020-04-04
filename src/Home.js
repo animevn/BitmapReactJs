@@ -1,7 +1,7 @@
-import React, {useEffect, useRef} from "react";
+import React, {useEffect, useRef, useState} from "react";
 
 const getPixelRatio = context => {
-  var backingStore =
+  let backingStore =
   context.backingStorePixelRatio ||
   context.webkitBackingStorePixelRatio ||
   context.mozBackingStorePixelRatio ||
@@ -13,6 +13,7 @@ const getPixelRatio = context => {
 
 function Home() {
   let canvasRef = useRef();
+  const [i, setI] = useState(0);
 
   useEffect(()=>{
     const canvas = canvasRef.current;
@@ -26,14 +27,13 @@ function Home() {
     canvas.style.height = `${height}px`;
 
     let requestId;
-    let i = 0;
     const render = ()=>{
       ctx.beginPath();
       ctx.fillStyle = "#ffbf00";
       ctx.arc(canvas.width/2, canvas.height/2,
-        (canvas.width/2) * Math.abs(Math.cos(i)), 0, 2 * Math.PI);
+        (canvas.width/2) * Math.abs(Math.sin(i)), 0, 2 * Math.PI);
       ctx.fill();
-      i += 0.05;
+      setI(old=>old + 0.0005);
       requestId = requestAnimationFrame(render);
     };
 
@@ -45,7 +45,10 @@ function Home() {
   });
 
   return (
-    <canvas ref={canvasRef} style={{ width: '100px', height: '100px' }}/>
+    <div className="container d-flex flex-column mt-5">
+      <canvas className="mx-auto" ref={canvasRef} style={{ width: '200px', height: '200px' }}/>
+    </div>
+
   )
 }
 
